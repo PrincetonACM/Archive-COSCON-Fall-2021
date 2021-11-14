@@ -20,6 +20,7 @@ long opt(long i, long j); // Calculate the DP recurrence
 // Calculate partial sums of weights from index i to j, inclusive
 long w(long i, long j)
 {
+  if (i > j) return 0;
   if (i == 0) return W[j];
   else return W[j] - W[i - 1];
 }
@@ -29,7 +30,7 @@ long _opt(long i, long j)
 {
   long s = 0xffffff;
 
-  opt(i, j-1); opt(i+1, j);
+  opt(i, j - 1); opt(i + 1, j);
 
   // Calculate left and right endpoints (this takes into account edge cases)
   long L = K[i][j - 1] == -1 ? i : K[i][j - 1],
@@ -47,7 +48,9 @@ long _opt(long i, long j)
 // Memoizer for opt (makes DP tractable)
 long opt(long i, long j)
 {
-  if (i == j || j < i) {
+  if (i < 0 || j < 0 || i >= n || j >= n) return 0;
+
+  if (i >= j) {
     K[i][j] = -1;
     return 0;
   }
@@ -75,7 +78,7 @@ int main()
     W[i] += W[i - 1];
   }
 
-  printf("%ld\n", opt(0, n-1));
+  printf("%ld\n", opt(0, n - 1));
   return 0;
 }
 

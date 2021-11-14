@@ -49,6 +49,8 @@ long _opt(long i, long j)
 // Memoizer for opt calculation
 long opt(long i, long j)
 {
+  if (i < 0 || j < 0 || i >= n || j >= n) return 0;
+
   if (i >= j) {
     return 0;
   } 

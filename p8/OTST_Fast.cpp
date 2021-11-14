@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <utility>
 #include <memory.h>
+
 using namespace std;
 #define MAXN 500
 
@@ -42,6 +43,8 @@ long _opt2(long i, long j)
 // Memoizer for opt2 calculation
 long opt2(long i, long j)
 {
+  if (i < 0 || j < 0 || i >= n || j >= n) return 0;
+
   if (i > j) {
     return 0;
   }
@@ -75,6 +78,8 @@ long _opt3(long i, long j)
 // Memoizer for opt3 calculation
 long opt3(long i, long j)
 {
+  if (i < 0 || j < 0 || i >= n || j >= n) return 0;
+
   if (i >= j) {
     return 0;
   } 

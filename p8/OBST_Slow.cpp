@@ -19,6 +19,7 @@ long opt(long i, long j); // Calculate the DP recurrence
 // Calculate partial sums of weights from index i to j, inclusive
 long w(long i, long j)
 {
+  if (i > j) return 0;
   if (i == 0) return W[j];
   else return W[j] - W[i - 1];
 }
