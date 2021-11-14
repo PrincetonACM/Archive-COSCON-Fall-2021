@@ -56,6 +56,7 @@ public class OBST_Fast {
             return M[i][j] = _opt(i, j);
         }
     }
+    
     public static void main(String[] args) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         String[] inputs = bufferedReader.readLine().replaceAll("\\s+$", "").split(" ");
