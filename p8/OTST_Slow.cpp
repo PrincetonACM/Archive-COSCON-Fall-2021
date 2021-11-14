@@ -1,5 +1,3 @@
-// OTST Slow version
-// COSCON 21 Problem 8, Ruijie Fang
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
@@ -7,49 +5,50 @@
 #include <algorithm>
 #include <utility>
 #include <memory.h>
+
 using namespace std;
 #define MAXN 500
-long M[MAXN][MAXN];
-long W[MAXN];
+
+long M[MAXN][MAXN]; // Stores dynamic programming array for opt
+long W[MAXN]; // Stores partial sums of weight function
 long ch[MAXN][MAXN];
 long n;
 
+long opt(long i, long j); // Calculate the DP recurrence
+
+// Calculate partial sums of weights from index i to j, inclusive
 long w(long i, long j)
 {
-  if (i>j) return 0;
+  if (i > j) return 0;
   if (i == 0) return W[j];
   else return W[j] - W[i - 1];
 }
 
-long opt(long i, long j);
+// Implementation of opt calculation
 long _opt(long i, long j)
 {
   long s = 0xffffff;
-  // Case 1: (c1, c2, k2=x, c3)
-  for (int k2 = i; k2 <= j; ++k2) {
-    for (int k1 = i+1; k1 < k2; ++k1) {
-      s = min(s, opt(i, k1-1) + opt(k1, k2-1) + opt(k2+1, j) + w(i, k2-1) +w(k2+1,j));
+
+  for (int k1 = i; k1 <= j - 1; k1++) {
+    for (int k2 = k1 + 1; k2 <= j; k2++) {
+      // In either case, this is a cost we will have to incur
+      long sunk_cost = opt(i, k1 - 1) + opt(k1 + 1, k2 - 1) + opt(k2 + 1, j);
+
+      s = min(s, sunk_cost + w(i, k1 - 1) + w(k1 + 1, j));
+      s = min(s, sunk_cost + w(i, k2 - 1) + w(k2 + 1, j));
     }
-    // k1==k2 - 1: only c1 and c3 exists,
-    // this is equal to OBST
-    s = min(s, opt(i, k2 - 1) + opt(k2 + 1, j) + w(i,k2-1)+w(k2+1,j));
   }
-  // Case 2: (c1, k1=x, c2, c3)
-  for (int k1 = i; k1<=j; ++k1) {
-    for (int k2 = k1+1; k2 < j; ++k2) {
-      s = min(s, opt(i, k1-1) + opt(k1+1, k2) + opt(k2+1,j) + w(i,k1-1) + w(k1+1,j));
-    }
-    // k2==j: only c1, c2 exists. this is equal to obst
-    s = min(s, opt(i, k1-1)+opt(k1+1,j)+w(i,k1-1)+w(k1+1,j));
-  }
+
   return s;
 }
 
+// Memoizer for opt calculation
 long opt(long i, long j)
 {
-  if (i == j || j < i) {
+  if (i >= j) {
     return 0;
   } 
+
   if (ch[i][j])
     return M[i][j];
   else {
@@ -57,17 +56,22 @@ long opt(long i, long j)
     return M[i][j] = _opt(i, j);
   }
 }
+
 int main()
 {
-    memset(M, 0, sizeof(M));
-    memset(W, 0, sizeof(W));
-    memset(ch, 0, sizeof(ch));
-    cin >> n;
-    cin >> W[0];
-    for(long i = 1; i < n; ++i) {
-      cin >> W[i];
-      W[i] += W[i - 1];
-    }
-    printf("%ld\n", opt(0, n-1));
+  memset(M, 0, sizeof(M));
+  memset(W, 0, sizeof(W));
+  memset(ch, 0, sizeof(ch));
+
+  cin >> n;
+  cin >> W[0];
+
+  // Precompute partial sums of weight function
+  for(long i = 1; i < n; ++i) {
+    cin >> W[i];
+    W[i] += W[i - 1];
+  }
+
+  printf("%ld\n", opt(0, n - 1));
   return 0;
 }
