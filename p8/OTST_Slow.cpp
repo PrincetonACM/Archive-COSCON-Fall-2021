@@ -11,7 +11,7 @@ using namespace std;
 
 long M[MAXN][MAXN]; // Stores dynamic programming array for opt
 long W[MAXN]; // Stores partial sums of weight function
-long ch[MAXN][MAXN];
+long ch[MAXN][MAXN]; // Do we know the solution to the current DP problem already?
 long n;
 
 long opt(long i, long j); // Calculate the DP recurrence
@@ -31,11 +31,15 @@ long _opt(long i, long j)
 
   for (int k1 = i; k1 <= j - 1; k1++) {
     for (int k2 = k1 + 1; k2 <= j; k2++) {
-      // In either case, this is a cost we will have to incur
-      long sunk_cost = opt(i, k1 - 1) + opt(k1 + 1, k2 - 1) + opt(k2 + 1, j);
+      // The cost that we will incur if we choose k1 as the root
+      long cost_1 = opt(i, k1 - 1) + opt(k1 + 1, k2) + opt(k2 + 1, j);
+      cost_1 += w(i, k1 - 1) + w(k1 + 1, j);
 
-      s = min(s, sunk_cost + w(i, k1 - 1) + w(k1 + 1, j));
-      s = min(s, sunk_cost + w(i, k2 - 1) + w(k2 + 1, j));
+      // The cost that we will incur if we choose k2 as the root
+      long cost_2 = opt(i, k1) + opt(k1 + 1, k2 - 1) + opt(k2 + 1, j);
+      cost_2 += w(i, k2 - 1) + w(k2 + 1, j);
+
+      s = min(s, cost_1); s = min(s, cost_2);
     }
   }
 
