@@ -4,7 +4,7 @@ You have until **Saturday, November 20th at 11.59 PM** to dispute any parts of o
 The challenge period is mainly to ensure that our calculations have been correct. Challenges should be sent to coscon.written.submission@gmail.com, with a cc to ptonacm@princeton.edu and the problem author. Things that you can (and should) dispute are
 
 - If we misrecorded your HackerRank score or the timestamp of your last submitted answer.
-- If you believe that the offline grading for problems 4 and 5 is not consistent with tests of your submission on your own end.
+- If you believe that the offline grading for problems 4, 5, or 6 is not consistent with tests of your submission on your own end.
 - If on a written problem you believe your solution met a criteria on the rubric and we didn’t give you the points it deserved. For example: you identified the PRG as an LFSR in problem six but got no credit.
 
 Examples of things we will **not** be open to dispute:
