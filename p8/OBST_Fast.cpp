@@ -12,7 +12,7 @@ using namespace std;
 long M[MAXN][MAXN]; // DP Array to store opt
 long W[MAXN]; // Store partial sums of the weights so we can answer weight queries quickly
 long K[MAXN][MAXN]; // Index set (corresponds to K_B in the writeup)
-long ch[MAXN][MAXN];
+long ch[MAXN][MAXN]; // Do we know the solution to the current DP problem already?
 long n;
 
 long opt(long i, long j); // Calculate the DP recurrence

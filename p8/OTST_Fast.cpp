@@ -10,7 +10,7 @@ using namespace std;
 
 long M[2][MAXN][MAXN]; // M[0] stores opt2, M[1] stores opt3 (see writeup)
 long W[MAXN]; // Stores partial sums
-long ch[2][MAXN][MAXN];
+long ch[2][MAXN][MAXN]; // Do we know the solution to the current DP problem already?
 long n;
 
 // Calculate partial sums of weights from index i to j, inclusive
@@ -33,8 +33,8 @@ long _opt2(long i, long j)
 {
   long s = 0xffffff;
 
-  for (long k = i ; k <= j; ++k)
-    s = min(s, opt3(i, k-1) + opt3(k+1, j) + w(i, k-1) + w(k+1, j));
+  for (long k = i; k <= j; ++k)
+    s = min(s, opt3(i, k) + opt3(k + 1, j));
 
   return s;
 }
@@ -42,11 +42,11 @@ long _opt2(long i, long j)
 // Memoizer for opt2 calculation
 long opt2(long i, long j)
 {
-  if (i == j || j < i) {
+  if (i > j) {
     return 0;
   }
 
-  if (ch[i][j])
+  if (ch[0][i][j])
     return M[0][i][j];
   else {
     ch[0][i][j] = 1;
@@ -59,9 +59,14 @@ long _opt3(long i, long j)
 {
   long s = 0xffffff;
 
-  for (int k = i ; k <= j; ++k) {
-    long c = min(opt2(i, k) + opt3(k + 1, j), opt3(i, k - 1) + opt2(k, j)) + w(i, k - 1) + w(k + 1, j);
-    s = min(s, c);
+  for (int k = i ; k <= j; k++) {
+    // The cost we incur if we choose the dummy node to be a right child
+    long cost_1 = opt3(i, k - 1) + w(i, k - 1) + opt2(k + 1, j) + w(k + 1, j);
+
+    // The cost we incur if we choose the dummy node to be a left child
+    long cost_2 = opt2(i, k - 1) + w(i, k - 1) + opt3(k + 1, j) + w(k + 1, j);
+
+    s = min(s, cost_1); s = min(s, cost_2);
   }
 
   return s;
@@ -70,7 +75,7 @@ long _opt3(long i, long j)
 // Memoizer for opt3 calculation
 long opt3(long i, long j)
 {
-  if (i == j || j < i) {
+  if (i >= j) {
     return 0;
   } 
 
